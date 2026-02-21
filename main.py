@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from schema import UserCreate, UserResponse
+from schema import UserCreate, UserResponse,UserUpdate
 from services import UserService
 
 app = FastAPI(title="User API", version="0.1")
@@ -34,8 +34,7 @@ def get_user(user_id: int):
 
 
 @app.put("/users/{user_id}", response_model=UserResponse)
-def update_user(user_id: int, user_data: UserCreate):
-    """Обновить данные пользователя"""
+def update_user(user_id: int, user_data: UserUpdate):  # ← теперь UserUpdate
     user = service.update_user(user_id, user_data)
     if not user:
         raise HTTPException(status_code=404, detail="Пользователь не найден")
