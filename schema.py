@@ -5,6 +5,7 @@ from typing import Optional
 class UserCreate(BaseModel):
     name: str
     age: int
+    email : str
 
     @field_validator("age")
     def validate_age(cls, value):
@@ -28,11 +29,12 @@ class UserCreate(BaseModel):
 class UserUpdate(UserCreate):
     pass  # Используем те же правила валидации
 
-
 class UserResponse(BaseModel):
     id: int
     name: str
     age: int
+    email: Optional[str]
 
     # Обновлённая конфигурация для Pydantic V2
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        from_attributes = True  # важно для раб

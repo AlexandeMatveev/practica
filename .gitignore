@@ -1,0 +1,15 @@
+# Переменные окружения
+.env
+.env.local
+
+# Виртуальное окружение
+.venv/
+__pycache__/
+*.pyc
+
+# Логи
+logs/
+*.log
+
+# Docker
+docker-compose.override.yml

@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  web_app:
+    build: .
+    container_name: fastapi_app1
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql+psycopg2://postgres:password@db:5432/mydb
+      ASYNC_DATABASE_URL: postgresql+asyncpg://postgres:password@db:5432/mydb
+      SYNC_DATABASE_URL: postgresql+psycopg2://postgres:password@db:5432/mydb
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app  # Монтируем весь проект для разработки с авто-перезагрузкой
+    networks:
+      - app_network
+
+  db:
+    image: postgres:16
+    container_name: postgres_db1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"  # Опционально: для доступа с хоста
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin1
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - app_network
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+
+networks:
+  app_network:
+    driver: bridge
