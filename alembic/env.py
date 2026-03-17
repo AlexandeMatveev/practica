@@ -10,8 +10,7 @@ from alembic import context
 # Добавляем путь к корню проекта, чтобы Python нашёл ваши модули
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from database import Base  # Импортируем Base
-from models import User   # Чтобы Alembic "видел" модель
+from app.core.database import Base  # Импортируем Base
 
 # ...
 

@@ -30,11 +30,41 @@ class UserUpdate(UserCreate):
     pass  # Используем те же правила валидации
 
 class UserResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     name: str
     age: int
-    email: Optional[str]
+    email: Optional[str] = None
 
-    # Обновлённая конфигурация для Pydantic V2
-    class Config:
-        from_attributes = True  # важно для раб
+
+# ============== Product Schemas ==============
+
+class ProductCreate(BaseModel):
+    name: str
+    description: Optional[str] = None
+    price: float
+    in_stock: bool = True
+
+    @field_validator("price")
+    def validate_price(cls, value):
+        if value < 0:
+            raise ValueError("Цена не может быть отрицательной")
+        return value
+
+
+class ProductUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    price: Optional[float] = None
+    in_stock: Optional[bool] = None
+
+
+class ProductResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+    description: Optional[str] = None
+    price: float
+    in_stock: bool

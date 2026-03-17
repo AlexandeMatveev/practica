@@ -21,3 +21,17 @@ Database: mydb
 Username: postgres
 
 Password: password
+
+
+
+--------------
+
+docker exec -it fastapi_app1 bash
+
+alembic init alembic
+
+alembic revision --autogenerate -m "Add email column"
+
+alembic upgrade head
+
+alembic downgrade -1
